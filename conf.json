@@ -1,0 +1,24 @@
+[
+  {
+    "country": "DK",
+    "state": "Zealand",
+    "locality": "Localhost",
+    "organization": "CharMixer",
+    "organization_unit": "DevOps",
+    "common_name": "www.example.com",
+    "domains": [],
+    "output_name": "private",
+    "expire_days": 365
+  },
+  {
+    "country": "DK",
+    "state": "Zealand",
+    "locality": "Localhost",
+    "organization": "CharMixer",
+    "organization_unit": "DevOps",
+    "common_name": "www.example-2.com",
+    "domains": ["example-2.com","example-3.com"],
+    "output_name": "private2",
+    "expire_days": 365
+  }
+]
