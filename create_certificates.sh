@@ -28,8 +28,8 @@ for row in $(cat conf.json | jq -c '.[]'); do
     I=$(($I + 1))
   done
 
+  # Generate private key
   openssl genrsa -out $OUTPUT_DIR/$OUTPUT_NAME.key 4096
-
 
   # ugly but working
   if [ -z "$DNS" ]; then
@@ -55,7 +55,9 @@ for row in $(cat conf.json | jq -c '.[]'); do
                -out $OUTPUT_DIR/$OUTPUT_NAME.crt \
                -extfile ssl.conf
 
-  openssl x509 -in $OUTPUT_DIR/$OUTPUT_NAME.crt -out $OUTPUT_DIR/$OUTPUT_NAME.pem -outform PEM
+  openssl x509 -inform DER -in $OUTPUT_DIR/$OUTPUT_NAME.crt -out $OUTPUT_DIR/$OUTPUT_NAME.pem -text
+
+  #cat $OUTPUT_DIR/$OUTPUT_NAME.crt > $OUTPUT_DIR/$OUTPUT_NAME.pem
 done
 
 exit 0
