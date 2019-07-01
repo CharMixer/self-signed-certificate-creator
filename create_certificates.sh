@@ -55,9 +55,8 @@ for row in $(cat conf.json | jq -c '.[]'); do
                -out $OUTPUT_DIR/$OUTPUT_NAME.crt \
                -extfile ssl.conf
 
-  openssl x509 -inform DER -in $OUTPUT_DIR/$OUTPUT_NAME.crt -out $OUTPUT_DIR/$OUTPUT_NAME.pem -text
-
-  #cat $OUTPUT_DIR/$OUTPUT_NAME.crt > $OUTPUT_DIR/$OUTPUT_NAME.pem
+  openssl rsa -in $OUTPUT_DIR/$OUTPUT_NAME.key -text > $OUTPUT_DIR/$OUTPUT_NAME-key.pem
+  openssl x509 -inform PEM -in $OUTPUT_DIR/$OUTPUT_NAME.crt > $OUTPUT_DIR/$OUTPUT_NAME-cert.pem
 done
 
 exit 0
