@@ -30,6 +30,7 @@ for row in $(cat conf.json | jq -c '.[]'); do
 
   openssl genrsa -out $OUTPUT_DIR/$OUTPUT_NAME.key 4096
 
+
   # ugly but working
   if [ -z "$DNS" ]; then
     openssl req -new -sha256 \
@@ -52,9 +53,9 @@ for row in $(cat conf.json | jq -c '.[]'); do
                -in $OUTPUT_DIR/$OUTPUT_NAME.csr \
                -signkey $OUTPUT_DIR/$OUTPUT_NAME.key \
                -out $OUTPUT_DIR/$OUTPUT_NAME.crt \
-               -extfile ssl.conf \
+               -extfile ssl.conf
 
-  cat $OUTPUT_DIR/$OUTPUT_NAME.crt $OUTPUT_DIR/$OUTPUT_NAME.key > $OUTPUT_DIR/$OUTPUT_NAME.pem
+  openssl x509 -in $OUTPUT_DIR/$OUTPUT_NAME.crt -out $OUTPUT_DIR/$OUTPUT_NAME.pem -outform PEM
 done
 
 exit 0
