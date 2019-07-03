@@ -3,7 +3,7 @@ FROM alpine:3.10
 # Add Maintainer Info
 LABEL maintainer="Lasse Nielsen <65roed@gmail.com>"
 
-RUN apk add --update --no-cache openssl jq
+RUN apk add --update --no-cache openssl jq bash
 
 WORKDIR /
 

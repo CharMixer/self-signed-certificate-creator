@@ -1,5 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 OUTPUT_DIR="./certs"
+
+mkdir -p $OUTPUT_DIR
 
 for row in $(cat conf.json | jq -c '.[]'); do
   _jq() {
@@ -36,24 +38,32 @@ for row in $(cat conf.json | jq -c '.[]'); do
     openssl req -new -sha256 \
               -out $OUTPUT_DIR/$OUTPUT_NAME.csr \
               -key $OUTPUT_DIR/$OUTPUT_NAME.key \
-              -config ssl.conf \
               -subj "/C=$COUNTRY/ST=$STATE/L=$LOCALITY/O=$ORGANIZATION/OU=$ORGANIZATION_UNIT/CN=$COMMON_NAME"
+
+    openssl x509 -req \
+               -sha256 \
+               -days $EXPIRE_DAYS \
+               -in $OUTPUT_DIR/$OUTPUT_NAME.csr \
+               -signkey $OUTPUT_DIR/$OUTPUT_NAME.key \
+               -out $OUTPUT_DIR/$OUTPUT_NAME.crt
   else
     openssl req -new -sha256 \
               -out $OUTPUT_DIR/$OUTPUT_NAME.csr \
               -key $OUTPUT_DIR/$OUTPUT_NAME.key \
-              -config ssl.conf \
-              -addext "subjectAltName = $DNS" \
+              -config <(cat ./ssl.conf <(printf "subjectAltName=$DNS")) \
+              -extensions v3_req \
               -subj "/C=$COUNTRY/ST=$STATE/L=$LOCALITY/O=$ORGANIZATION/OU=$ORGANIZATION_UNIT/CN=$COMMON_NAME"
-  fi
 
-  openssl x509 -req \
+    openssl x509 -req \
                -sha256 \
-               -days 365 \
+               -days $EXPIRE_DAYS \
                -in $OUTPUT_DIR/$OUTPUT_NAME.csr \
                -signkey $OUTPUT_DIR/$OUTPUT_NAME.key \
                -out $OUTPUT_DIR/$OUTPUT_NAME.crt \
-               -extfile ssl.conf
+               -extfile <(cat ./ssl.conf <(printf "subjectAltName=$DNS")) \
+               -extensions v3_req
+  fi
+
 
   openssl rsa -in $OUTPUT_DIR/$OUTPUT_NAME.key -text > $OUTPUT_DIR/$OUTPUT_NAME-key.pem
   openssl x509 -inform PEM -in $OUTPUT_DIR/$OUTPUT_NAME.crt > $OUTPUT_DIR/$OUTPUT_NAME-cert.pem
