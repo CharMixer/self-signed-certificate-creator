@@ -8,7 +8,8 @@
     "common_name": "www.example.com",
     "domains": [],
     "output_name": "private",
-    "expire_days": 365
+    "expire_days": 365,
+    "skip_if_found": false
   },
   {
     "country": "DK",
@@ -19,6 +20,7 @@
     "common_name": "www.example-2.com",
     "domains": ["example-2.com","example-3.com"],
     "output_name": "private2",
-    "expire_days": 365
+    "expire_days": 365,
+    "skip_if_found": true
   }
 ]

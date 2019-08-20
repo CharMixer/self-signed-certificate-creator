@@ -17,8 +17,18 @@ for row in $(cat conf.json | jq -c '.[]'); do
   DOMAINS=$(_jq '.domains')
   OUTPUT_NAME=$(_jq '.output_name')
   EXPIRE_DAYS=$(_jq '.expire_days')
+  SKIP_IF_FOUND=$(_jq '.skip_if_found')
 
   I=1
+
+  if [ "$SKIP_IF_FOUND" = true ]; then
+    if [ -f "$OUTPUT_DIR/$OUTPUT_NAME.key" ]; then
+      # private key already exists, so skip
+      echo "Skipped $COMMON_NAME, since $OUTPUT_DIR/$OUTPUT_NAME.key was found and skip_if_found was set."
+      continue;
+    fi
+  fi
+
   DNS=""
   for domain in $(echo "${DOMAINS}" | jq -r '.[]'); do
     DOMAIN=${domain}
