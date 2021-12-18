@@ -1,7 +1,7 @@
 FROM alpine:3.10
 
 # Add Maintainer Info
-LABEL maintainer="Lasse Nielsen <65roed@gmail.com>"
+LABEL maintainer="charmixer"
 
 RUN apk add --update --no-cache openssl jq bash
 
